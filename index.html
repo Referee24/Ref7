@@ -16,6 +16,24 @@
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
       }
+      #root:empty::before {
+        content: 'Loading...';
+        display: block;
+        text-align: center;
+        margin-top: 50px;
+        color: #6b7280;
+      }
+      #error-display {
+        display: none;
+        padding: 20px;
+        background: #fee2e2;
+        color: #b91c1c;
+        border: 1px solid #f87171;
+        margin: 20px;
+        border-radius: 8px;
+        font-family: monospace;
+        white-space: pre-wrap;
+      }
     </style>
   <script type="importmap">
 {
@@ -23,13 +41,29 @@
     "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0"
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "vite": "https://aistudiocdn.com/vite@^7.2.4",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1"
   }
 }
 </script>
 </head>
   <body>
+    <div id="error-display"></div>
     <div id="root"></div>
+    <script>
+      // Global error handler to catch "process is not defined" or other startup errors
+      window.onerror = function(message, source, lineno, colno, error) {
+        const errorDiv = document.getElementById('error-display');
+        const rootDiv = document.getElementById('root');
+        if (errorDiv) {
+          errorDiv.style.display = 'block';
+          errorDiv.textContent = 'Application Error:\n' + message + '\n\nAt: ' + source + ':' + lineno + ':' + colno;
+          if (rootDiv) rootDiv.style.display = 'none';
+        }
+        console.error('Global Error:', error);
+      };
+    </script>
     <script type="module" src="/index.tsx"></script>
   </body>
 </html>
