@@ -61,8 +61,11 @@ export const Study: React.FC = () => {
       }
     };
     reader.readAsText(file);
+    
     // Reset input so the same file can be selected again if needed
-    event.target.value = '';
+    if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+    }
   };
 
   const handleSaveCustomTopic = () => {
